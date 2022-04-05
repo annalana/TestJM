@@ -244,7 +244,7 @@ class Lineclass {
         if (linetype.equals("arabic")){
             System.out.println(arabicanswer);
         }else{
-            if (arabicanswer >= 0){
+            if (arabicanswer > 0){
                 Number answer = new Number(arabicanswer);
                 answer.transformToRome();
                 romeanswer = answer.romeN;
