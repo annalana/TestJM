@@ -41,6 +41,7 @@ class Number{
         try{
             arabicN = Integer.parseInt(num);
             numberType = "arabic";
+            if(arabicN > 10) throw new Exception("Too big number");
         }catch (NumberFormatException e){
             if(newLine.matches("[IVXLC]+")) {
                 romeN = num;
@@ -74,6 +75,7 @@ class Number{
                             throw new Exception("Error in rome syntax");
                     }
                     arabicN = arabicN + arg;
+                    if (arabicN > 10) throw new Exception("Too big number");
                     if (index < (transformString.length() - 1)){
                         transformString = transformString.substring(index + 1);
                         transforming(transformString);
