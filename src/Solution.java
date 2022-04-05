@@ -11,11 +11,23 @@ public class Solution {
         }
     }
 }
-// Класс для получения начальных значений
+// Классы для получения начальных значений
 class StartData{
     String methodArr[] = new String[] {"+", "-", "/", "*"};
     String romeArr[] = new String[] {"I", "V", "X", "L", "C"};
     int arabArr[] = new int[] {1, 5, 10, 50, 100};
+}
+enum Romes {
+    I(1, "I"),II(2, "II"),III(3, "III"),
+    IV(4, "IV"), V(5, "V"), VI(6, "VI"),
+    VII(7, "VII"), VIII(8, "VIII"), IX(9, "IX"),
+    X(10, "X");
+    int arabicValue;
+    String romeValue;
+    Romes(int arabic, String rome){
+        this.arabicValue = arabic;
+        this.romeValue = rome;
+    }
 }
 
 // Класс для работы с числами (распознавание, обработка)
@@ -42,6 +54,7 @@ class Number{
             arabicN = Integer.parseInt(num);
             numberType = "arabic";
             if(arabicN > 10) throw new Exception("Too big number");
+            if(arabicN <= 0) throw new Exception("Negative numbers and zero are not allowed");
         }catch (NumberFormatException e){
             if(newLine.matches("[IVXLC]+")) {
                 romeN = num;
@@ -52,48 +65,15 @@ class Number{
         }
     }
     // Перевод римского числа в арабское
-    void transforming(String strToTransform) throws Exception{
-        String romes[] = new StartData().romeArr;
-        int arabics[] = new StartData().arabArr;
-        String transformString = new String(strToTransform);
-        int lenght = transformString.length();
-        if (lenght > 0) {
-            for (int i = 4; i >= 0; i--){
-                String str = romes[i];
-                int index = transformString.indexOf(str);
-                if (index != -1){
-                    int arg;
-                    // При расширении перечня возможных чисел нужно добавить циклы
-                    switch(index){
-                        case 0:
-                            arg = arabics[i];
-                            break;
-                        case 1:
-                            arg = arabics[i] - 1;
-                            break;
-                        default:
-                            throw new Exception("Error in rome syntax");
-                    }
-                    arabicN = arabicN + arg;
-                    if (arabicN > 10) throw new Exception("Too big number");
-                    if (index < (transformString.length() - 1)){
-                        transformString = transformString.substring(index + 1);
-                        transforming(transformString);
-                        transformString = "";
-                    }else{
-                        transformString = "";
-                        break;
-                    }
-                }
+    void transformToArabic() throws Exception{
+        for (Romes rome: Romes.values()){
+            if (rome.romeValue.equals(romeN)) {
+                arabicN = rome.arabicValue;
+                break;
             }
         }
-    }
-    void transformToArabic() throws Exception{
-        arabicN = 0;
-        try {
-            transforming(romeN);
-        }catch (Exception ex){
-            throw ex;
+        if (arabicN == 0){
+            throw new Exception("Error in rome Syntax");
         }
     }
     // Перевод арабского числа в римское
